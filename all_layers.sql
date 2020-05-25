@@ -225,7 +225,7 @@ CREATE INDEX "Water_geom"
 CREATE TABLE soilplandata."Water_audit"
 (
   id serial,
-  geom geometry(MultiPolygon,4326),
+  geom geometry(MultiPoint,4326),
   fid double precision,
   application_id integer,
   type text,
