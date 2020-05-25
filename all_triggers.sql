@@ -51,11 +51,6 @@ $BODY$
 $BODY$
   LANGUAGE plpgsql;
 
-CREATE TRIGGER application_update_trigger
-AFTER UPDATE ON soilplandata."Application"
-  FOR EACH ROW EXECUTE PROCEDURE application_update();
-
-
 
 
 
@@ -64,9 +59,9 @@ CREATE OR REPLACE FUNCTION spreading_insert() RETURNS trigger AS
 $$
   BEGIN
     INSERT INTO soilplandata."Spreading_audit"
-      (id, geom, spread_date, manufacturer_actual, spread_area_da, spread_sludge_t, sludge_approved_t, sludge_remaining_t, created, created_by)
+      (id, geom, application_id, spread_date, manufacturer_actual, spread_area_da, spread_sludge_t, sludge_approved_t, sludge_remaining_t, created, created_by)
     VALUES
-      (NEW.id, NEW.geom, NEW.spread_date, NEW.manufacturer_actual, NEW.spread_area_da, NEW.spread_sludge_t, NEW.sludge_approved_t, NEW.sludge_remaining_t, current_timestamp, current_user);
+      (NEW.id, NEW.geom, NEW.application_id, NEW.spread_date, NEW.manufacturer_actual, NEW.spread_area_da, NEW.spread_sludge_t, NEW.sludge_approved_t, NEW.sludge_remaining_t, current_timestamp, current_user);
     RETURN NEW;
   END;
 $$
@@ -103,20 +98,15 @@ $BODY$
       WHERE deleted IS NULL and id = OLD.id;
 
     INSERT INTO soilplandata."Spreading_audit"
-      (id, geom, spread_date, manufacturer_actual, spread_area_da, spread_sludge_t, sludge_approved_t, sludge_remaining_t, created, created_by)
+      (id, geom, application_id, spread_date, manufacturer_actual, spread_area_da, spread_sludge_t, sludge_approved_t, sludge_remaining_t, created, created_by)
     VALUES
-      (NEW.id, NEW.geom, NEW.spread_date, NEW.manufacturer_actual, NEW.spread_area_da, NEW.spread_sludge_t, NEW.sludge_approved_t, NEW.sludge_remaining_t, current_timestamp, current_user);
+      (NEW.id, NEW.geom, NEW.application_id, NEW.spread_date, NEW.manufacturer_actual, NEW.spread_area_da, NEW.spread_sludge_t, NEW.sludge_approved_t, NEW.sludge_remaining_t, current_timestamp, current_user);
 
     RETURN NEW;
 
   END;
 $BODY$
   LANGUAGE plpgsql;
-
-CREATE TRIGGER spreading_update_trigger
-AFTER UPDATE ON soilplandata."Spreading"
-  FOR EACH ROW EXECUTE PROCEDURE spreading_update();
-
 
 
 
@@ -127,9 +117,9 @@ CREATE OR REPLACE FUNCTION hq_insert() RETURNS trigger AS
 $$
   BEGIN
     INSERT INTO soilplandata."Hq_audit"
-      (id, geom, name, address, city, municipality, phone, email, landowner, landowner_address, created, created_by)
+      (id, geom, application_id, hq_name, address, city, municipality, phone, email, landowner, landowner_address, created, created_by)
     VALUES
-      (NEW.id, NEW.geom, NEW.name, NEW.address,  NEW.city,  NEW.municipality,  NEW.phone,  NEW.email,  NEW.landowner,  NEW.landowner_address, current_timestamp, current_user);
+      (NEW.id, NEW.geom, NEW.application_id, NEW.hq_name, NEW.address,  NEW.city,  NEW.municipality,  NEW.phone,  NEW.email,  NEW.landowner,  NEW.landowner_address, current_timestamp, current_user);
     RETURN NEW;
   END;
 $$
@@ -166,9 +156,9 @@ $BODY$
       WHERE deleted IS NULL and id = OLD.id;
 
     INSERT INTO soilplandata."Hq_audit"
-      (id, geom, name, address, city, municipality, phone, email, landowner, landowner_address, created, created_by)
+      (id, geom, application_id, hq_name, address, city, municipality, phone, email, landowner, landowner_address, created, created_by)
     VALUES
-      (NEW.id, NEW.geom, NEW.name, NEW.address,  NEW.city,  NEW.municipality,  NEW.phone,  NEW.email,  NEW.landowner,  NEW.landowner_address, current_timestamp, current_user);
+      (NEW.id, NEW.geom, NEW.application_id, NEW.hq_name, NEW.address,  NEW.city,  NEW.municipality,  NEW.phone,  NEW.email,  NEW.landowner,  NEW.landowner_address, current_timestamp, current_user);
 
     RETURN NEW;
 
@@ -176,27 +166,23 @@ $BODY$
 $BODY$
   LANGUAGE plpgsql;
 
-CREATE TRIGGER hq_update_trigger
-AFTER UPDATE ON soilplandata."Hq"
-  FOR EACH ROW EXECUTE PROCEDURE hq_update();
-
 
 
 CREATE OR REPLACE FUNCTION storage_insert() RETURNS trigger AS
 $$
   BEGIN
     INSERT INTO soilplandata."Storage_audit"
-      (id, geom, fid, capacity_t, sand, silt, clay, organic_soil, distance_drinking_water_m, distance_non_drinking_water_m, distance_neighbor_m,risk_of_overwater, risk_management, created, created_by)
+      (id, geom, fid, application_id, capacity_t, sand, silt, clay, organic_soil, distance_drinking_water_m, distance_non_drinking_water_m, distance_neighbor_m,risk_of_overwater, risk_management, created, created_by)
     VALUES
-      (NEW.id, NEW.geom, NEW.fid, NEW.capacity_t, NEW.sand, NEW.silt, NEW.clay, NEW.organic_soil, NEW.distance_drinking_water_m, NEW.distance_non_drinking_water_m, NEW.distance_neighbor_m, NEW.risk_of_overwater, NEW.risk_management, current_timestamp, current_user);
+      (NEW.id, NEW.geom, NEW.fid, NEW.application_id, NEW.capacity_t, NEW.sand, NEW.silt, NEW.clay, NEW.organic_soil, NEW.distance_drinking_water_m, NEW.distance_non_drinking_water_m, NEW.distance_neighbor_m, NEW.risk_of_overwater, NEW.risk_management, current_timestamp, current_user);
     RETURN NEW;
   END;
 $$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER storage_insert_trigger
-AFTER INSERT ON soilplandata."BoundaryA"
-  FOR EACH ROW EXECUTE PROCEDURE boundarya_insert();
+AFTER INSERT ON soilplandata."Storage"
+  FOR EACH ROW EXECUTE PROCEDURE storage_insert();
 
 
 CREATE OR REPLACE FUNCTION storage_delete() RETURNS trigger AS
@@ -225,21 +211,15 @@ $BODY$
       WHERE deleted IS NULL and id = OLD.id;
 
     INSERT INTO soilplandata."Storage_audit"
-      (id, geom, fid, capacity_t, sand, silt, clay, organic_soil, distance_drinking_water_m, distance_non_drinking_water_m, distance_neighbor_m,risk_of_overwater, risk_management, created, created_by)
+      (id, geom, fid, application_id, capacity_t, sand, silt, clay, organic_soil, distance_drinking_water_m, distance_non_drinking_water_m, distance_neighbor_m,risk_of_overwater, risk_management, created, created_by)
     VALUES
-      (NEW.id, NEW.geom, NEW.fid, NEW.capacity_t, NEW.sand, NEW.silt, NEW.clay, NEW.organic_soil, NEW.distance_drinking_water_m, NEW.distance_non_drinking_water_m, NEW.distance_neighbor_m, NEW.risk_of_overwater, NEW.risk_management, current_timestamp, current_user);
+      (NEW.id, NEW.geom, NEW.fid, NEW.application_id, NEW.capacity_t, NEW.sand, NEW.silt, NEW.clay, NEW.organic_soil, NEW.distance_drinking_water_m, NEW.distance_non_drinking_water_m, NEW.distance_neighbor_m, NEW.risk_of_overwater, NEW.risk_management, current_timestamp, current_user);
 
     RETURN NEW;
 
   END;
 $BODY$
   LANGUAGE plpgsql;
-
-CREATE TRIGGER storage_update_trigger
-AFTER UPDATE ON soilplandata."Storage"
-  FOR EACH ROW EXECUTE PROCEDURE storage_update();
-
-
 
 
 
@@ -251,9 +231,9 @@ CREATE OR REPLACE FUNCTION water_insert() RETURNS trigger AS
 $$
   BEGIN
     INSERT INTO soilplandata."Water_audit"
-      (id, geom, fid, type, drinking_water, created, created_by)
+      (id, geom, fid, application_id, type, drinking_water, created, created_by)
     VALUES
-      (NEW.id, NEW.geom, NEW.fid, NEW.type, NEW.drinking_water,  current_timestamp, current_user);
+      (NEW.id, NEW.geom, NEW.fid, NEW.application_id, NEW.type, NEW.drinking_water,  current_timestamp, current_user);
     RETURN NEW;
   END;
 $$
@@ -290,9 +270,9 @@ $BODY$
       WHERE deleted IS NULL and id = OLD.id;
 
     INSERT INTO soilplandata."Water_audit"
-      (id, geom, fid, type, drinking_water, created, created_by)
+      (id, geom, fid, application_id, type, drinking_water, created, created_by)
     VALUES
-      (NEW.id, NEW.geom, NEW.fid, NEW.type, NEW.drinking_water, current_timestamp, current_user);
+      (NEW.id, NEW.geom, NEW.fid, NEW.application_id, NEW.type, NEW.drinking_water, current_timestamp, current_user);
 
     RETURN NEW;
 
@@ -300,9 +280,6 @@ $BODY$
 $BODY$
   LANGUAGE plpgsql;
 
-CREATE TRIGGER water_update_trigger
-AFTER UPDATE ON soilplandata."Water"
-  FOR EACH ROW EXECUTE PROCEDURE water_update();
 
 
 
@@ -310,9 +287,9 @@ CREATE OR REPLACE FUNCTION soilsample_insert() RETURNS trigger AS
 $$
   BEGIN
     INSERT INTO soilplandata."SoilSample_audit"
-      (id, geom, fid, number, date, soil_type, clay_classification, kg_l, mold_classification, ph,phosphor, potassium, magnesium ,calcium, valid_from, valid_untill,  created, created_by)
+      (id, geom, fid, application_id, number, date, soil_type, clay_classification, kg_l, mold_classification, ph,phosphor, potassium, magnesium ,calcium, valid_from, valid_untill,  created, created_by)
     VALUES
-      (NEW.id, NEW.geom, NEW.fid, NEW.number, NEW.date, NEW.soil_type, NEW.clay_classification, NEW.kg_l, NEW.mold_classification, NEW.ph,NEW.phosphor, NEW.potassium, NEW.magnesium ,NEW.calcium, NEW.valid_from, NEW.valid_untill, current_timestamp, current_user);
+      (NEW.id, NEW.geom, NEW.fid, NEW.application_id, NEW.number, NEW.date, NEW.soil_type, NEW.clay_classification, NEW.kg_l, NEW.mold_classification, NEW.ph,NEW.phosphor, NEW.potassium, NEW.magnesium ,NEW.calcium, NEW.valid_from, NEW.valid_untill, current_timestamp, current_user);
     RETURN NEW;
   END;
 $$
@@ -349,9 +326,9 @@ $BODY$
       WHERE deleted IS NULL and id = OLD.id;
 
     INSERT INTO soilplandata."SoilSample_audit"
-      (id, geom, fid, number, date, soil_type, clay_classification, kg_l, mold_classification, ph,phosphor, potassium, magnesium ,calcium, valid_from, valid_untill, created, created_by)
+      (id, geom, fid, application_id, number, date, soil_type, clay_classification, kg_l, mold_classification, ph,phosphor, potassium, magnesium ,calcium, valid_from, valid_untill, created, created_by)
     VALUES
-      (NEW.id, NEW.geom,  NEW.fid, NEW.number, NEW.date, NEW.soil_type, NEW.clay_classification, NEW.kg_l, NEW.mold_classification, NEW.ph,NEW.phosphor, NEW.potassium, NEW.magnesium ,NEW.calcium, NEW.valid_from, NEW.valid_untill, current_timestamp, current_user);
+      (NEW.id, NEW.geom,  NEW.fid, NEW.application_id, NEW.number, NEW.date, NEW.soil_type, NEW.clay_classification, NEW.kg_l, NEW.mold_classification, NEW.ph,NEW.phosphor, NEW.potassium, NEW.magnesium ,NEW.calcium, NEW.valid_from, NEW.valid_untill, current_timestamp, current_user);
 
     RETURN NEW;
 
@@ -359,6 +336,3 @@ $BODY$
 $BODY$
   LANGUAGE plpgsql;
 
-CREATE TRIGGER soilsample_update_trigger
-AFTER UPDATE ON soilplandata."SoilSample"
-  FOR EACH ROW EXECUTE PROCEDURE soilsample_update();

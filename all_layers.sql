@@ -1,7 +1,7 @@
 ﻿-- start of application table and trigger
 CREATE TABLE soilplandata."Application_audit"
 (
-  id bigint NOT NULL DEFAULT nextval('"Application_audit_id_seq"'::regclass),
+  id serial,
   geom geometry(MultiPolygon,4326),
   fid double precision,
   date date,
@@ -11,7 +11,7 @@ CREATE TABLE soilplandata."Application_audit"
   purpose_number integer,
   total_area_da real,
   spread_area_da real,
-  manufacturer type character varying(254),
+  manufacturer  character varying(254),
   sludge_category integer,
   max_dm_t_da real,
   dm real,
@@ -32,7 +32,7 @@ CREATE INDEX "sidx_Application_audit_geom"
 
 CREATE TABLE soilplandata."Application"
 (
-  id bigint NOT NULL DEFAULT nextval('"Application_audit_id_seq"'::regclass),
+  id serial,
   geom geometry(MultiPolygon,4326),
   fid double precision,
   date date,
@@ -42,7 +42,7 @@ CREATE TABLE soilplandata."Application"
   purpose_number integer,
   total_area_da real,
   spread_area_da real,
-  manufacturer type character varying(254),
+  manufacturer  character varying(254),
   sludge_category integer,
   max_dm_t_da real,
   dm real,
@@ -66,8 +66,9 @@ CREATE INDEX "sidx_Application_geom"
 
 CREATE TABLE soilplandata."Spreading_audit"
 (
-  id bigint NOT NULL DEFAULT nextval('"Spreading_audit_id_seq"'::regclass),
+  id serial,
   geom geometry(MultiPolygon,4326),
+  application_id integer,
   spread_date date,
   manufacturer_actual text,
   spread_area_da real,
@@ -86,8 +87,9 @@ CREATE INDEX "sidx_Spreading_audit_geom"
 
 CREATE TABLE soilplandata."Spreading"
 (
-  id bigint NOT NULL DEFAULT nextval('"Spreading_id_seq"'::regclass),
+  id serial,
   geom geometry(MultiPolygon,4326),
+  application_id integer,
   spread_date date,
   manufacturer_actual text,
   spread_area_da real,
@@ -108,9 +110,10 @@ CREATE INDEX "sidx_Spreading_geom"
 
 CREATE TABLE soilplandata."Hq_audit"
 (
-  id bigint NOT NULL DEFAULT nextval('"Hq_audit_id_seq"'::regclass),
+  id serial,
   geom geometry(MultiPoint,4326),
-  name text,
+  application_id integer,
+  hq_name text,
   address text,
   city text,
   municipality text,
@@ -130,9 +133,10 @@ CREATE INDEX "Hq_audit_geom"
 
 CREATE TABLE soilplandata."Hq"
 (
-  id bigint NOT NULL DEFAULT nextval('"Hq_id_seq"'::regclass),
+  id serial,
   geom geometry(MultiPoint,4326),
-  name text,
+  application_id integer,
+  hq_name text,
   address text,
   city text,
   municipality text,
@@ -154,9 +158,10 @@ CREATE INDEX "Hq_geom"
 
 CREATE TABLE soilplandata."Storage"
 (
-  id bigint NOT NULL DEFAULT nextval('"Storage_id_seq"'::regclass),
+  id serial,
   geom geometry(MultiPoint,4326),
   fid double precision,
+  application_id integer,
   capacity_t real,
   sand boolean,
   silt boolean,
@@ -176,9 +181,10 @@ CREATE INDEX "Storage_geom"
 
 CREATE TABLE soilplandata."Storage_audit"
 (
-  id bigint NOT NULL DEFAULT nextval('"Storage_audit_id_seq"'::regclass),
+  id serial,
   geom geometry(MultiPoint,4326),
   fid double precision,
+  application_id integer,
   capacity_t real,
   sand boolean,
   silt boolean,
@@ -203,9 +209,10 @@ CREATE TABLE soilplandata."Storage_audit"
 
 CREATE TABLE soilplandata."Water"
 (
-  id bigint NOT NULL DEFAULT nextval('"Water_id_seq"'::regclass),
+  id serial,
   geom geometry(MultiPoint,4326),
   fid double precision,
+  application_id integer,
   type text,
   drinking_water boolean, 
   CONSTRAINT "Water_pkey" PRIMARY KEY (id)
@@ -217,9 +224,10 @@ CREATE INDEX "Water_geom"
 
 CREATE TABLE soilplandata."Water_audit"
 (
-  id bigint NOT NULL DEFAULT nextval('"Water_audit_id_seq"'::regclass),
+  id serial,
   geom geometry(MultiPolygon,4326),
   fid double precision,
+  application_id integer,
   type text,
   drinking_water boolean, 
   created timestamp without time zone,
@@ -234,9 +242,10 @@ CREATE TABLE soilplandata."Water_audit"
 -- start of soil sample table and trigger
 CREATE TABLE soilplandata."SoilSample_audit"
 (
-  id bigint NOT NULL DEFAULT nextval('"SoilSample_audit_id_seq"'::regclass),
+  id serial,
   geom geometry(MultiPoint,4326),
   fid double precision,
+  application_id integer,
   number integer,
   date date,
   soil_type text,
@@ -262,9 +271,10 @@ CREATE INDEX "sidx_SoilSample_audit_geom"
 
 CREATE TABLE soilplandata."SoilSample"
 (
-  id bigint NOT NULL DEFAULT nextval('"SoilSample_audit_id_seq"'::regclass),
+  id serial,
   geom geometry(MultiPoint,4326),
   fid double precision,
+  application_id integer,
   number integer,
   date date,
   soil_type text,
