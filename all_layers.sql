@@ -177,7 +177,7 @@ CREATE INDEX "Storage_geom"
 CREATE TABLE soilplandata."Storage_audit"
 (
   id bigint NOT NULL DEFAULT nextval('"Storage_audit_id_seq"'::regclass),
-  geom geometry(MultiPolygon,4326),
+  geom geometry(MultiPoint,4326),
   fid double precision,
   capacity_t real,
   sand boolean,
