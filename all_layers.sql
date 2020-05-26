@@ -3,9 +3,9 @@ CREATE TABLE soilplandata."Application_audit"
 (
   id serial,
   geom geometry(MultiPolygon,4326),
-  application_id integer,
+  application_id character varying(254),
   date date,
-  approved boolean,
+  approved  character varying(254),
   district_number integer,
   farm_number integer,
   purpose_number integer,
@@ -34,9 +34,9 @@ CREATE TABLE soilplandata."Application"
 (
   id serial,
   geom geometry(MultiPolygon,4326),
-  application_id integer,
+  application_id character varying(254),
   date date,
-  approved boolean,
+  approved  character varying(254),
   district_number integer,
   farm_number integer,
   purpose_number integer,
@@ -68,7 +68,7 @@ CREATE TABLE soilplandata."Spreading_audit"
 (
   id serial,
   geom geometry(MultiPolygon,4326),
-  application_id integer,
+  application_id character varying(254),
   spread_date date,
   manufacturer_actual text,
   spread_area_da real,
@@ -89,7 +89,7 @@ CREATE TABLE soilplandata."Spreading"
 (
   id serial,
   geom geometry(MultiPolygon,4326),
-  application_id integer,
+  application_id character varying(254),
   spread_date date,
   manufacturer_actual text,
   spread_area_da real,
@@ -112,7 +112,7 @@ CREATE TABLE soilplandata."Hq_audit"
 (
   id serial,
   geom geometry(MultiPoint,4326),
-  application_id integer,
+  application_id character varying(254),
   hq_name text,
   address text,
   city text,
@@ -135,7 +135,7 @@ CREATE TABLE soilplandata."Hq"
 (
   id serial,
   geom geometry(MultiPoint,4326),
-  application_id integer,
+  application_id character varying(254),
   hq_name text,
   address text,
   city text,
@@ -160,16 +160,16 @@ CREATE TABLE soilplandata."Storage"
 (
   id serial,
   geom geometry(MultiPoint,4326),
-  application_id integer,
+  application_id character varying(254),
   capacity_t real,
-  sand boolean,
-  silt boolean,
-  clay boolean,
-  organic_soil boolean,
+  sand  character varying(254),
+  silt  character varying(254),
+  clay  character varying(254),
+  organic_soil  character varying(254),
   distance_drinking_water_m real,
   distance_non_drinking_water_m real,
   distance_neighbor_m real,
-  risk_of_overwater boolean,
+  risk_of_overwater  character varying(254),
   risk_management text,
   CONSTRAINT "Storage_pkey" PRIMARY KEY (id)
 );
@@ -182,16 +182,16 @@ CREATE TABLE soilplandata."Storage_audit"
 (
   id serial,
   geom geometry(MultiPoint,4326),
-  application_id integer,
+  application_id character varying(254),
   capacity_t real,
-  sand boolean,
-  silt boolean,
-  clay boolean,
-  organic_soil boolean,
+  sand  character varying(254),
+  silt  character varying(254),
+  clay  character varying(254),
+  organic_soil  character varying(254),
   distance_drinking_water_m real,
   distance_non_drinking_water_m real,
   distance_neighbor_m real,
-  risk_of_overwater boolean,
+  risk_of_overwater  character varying(254),
   risk_management text,
   created timestamp without time zone,
   created_by character varying(32),
@@ -209,9 +209,9 @@ CREATE TABLE soilplandata."Water"
 (
   id serial,
   geom geometry(MultiPoint,4326),
-  application_id integer,
+  application_id character varying(254),
   type text,
-  drinking_water boolean, 
+  drinking_water  character varying(254), 
   CONSTRAINT "Water_pkey" PRIMARY KEY (id)
 );
 CREATE INDEX "Water_geom"
@@ -223,9 +223,9 @@ CREATE TABLE soilplandata."Water_audit"
 (
   id serial,
   geom geometry(MultiPoint,4326),
-  application_id integer,
+  application_id character varying(254),
   type text,
-  drinking_water boolean, 
+  drinking_water  character varying(254), 
   created timestamp without time zone,
   created_by character varying(32),
   deleted timestamp without time zone,
@@ -240,7 +240,7 @@ CREATE TABLE soilplandata."SoilSample_audit"
 (
   id serial,
   geom geometry(MultiPoint,4326),
-  application_id integer,
+  application_id character varying(254),
   number integer,
   date date,
   soil_type text,
@@ -268,7 +268,7 @@ CREATE TABLE soilplandata."SoilSample"
 (
   id serial,
   geom geometry(MultiPoint,4326),
-  application_id integer,
+  application_id character varying(254),
   number integer,
   date date,
   soil_type text,
